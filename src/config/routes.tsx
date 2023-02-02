@@ -1,15 +1,11 @@
-import { Foo } from '../views/Foo';
-import { Bar } from '../views/Bar';
-import { Second } from '../components/welcome/second';
-import { First } from '../components/welcome/first';
-import { Third } from '../components/welcome/third';
-import { Forth } from '../components/welcome/forth';
+import { Second } from '../components/welcome/Second';
+import { First } from '../components/welcome/First';
+import { Third } from '../components/welcome/Third';
+import { Forth } from '../components/welcome/Forth';
 import { Welcome } from '../views/Welcome';
 import { RouteRecordRaw } from 'vue-router';
 
 export const routes: RouteRecordRaw[] = [
-  { path: '/', component: Foo },
-  { path: '/about', component: <Bar></Bar> },
   { 
     path: '/welcome',
     component: Welcome,
