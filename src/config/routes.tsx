@@ -2,7 +2,7 @@ import { Second } from '../components/welcome/Second';
 import { First } from '../components/welcome/First';
 import { Third } from '../components/welcome/Third';
 import { Forth } from '../components/welcome/Forth';
-import { Welcome } from '../views/Welcome';
+import { Welcome } from '../components/welcome/Welcome';
 import { RouteRecordRaw } from 'vue-router';
 
 export const routes: RouteRecordRaw[] = [
