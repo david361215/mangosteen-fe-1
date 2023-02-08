@@ -34,7 +34,8 @@
     padding: 0 16px var(--welcome-nav-gap) 16px;
     display: flex;
     justify-content: space-between;
-    font-size: 32px;
+    font-size: 24px;
+    line-height: calc(var(--welcome-nav-height) - var(--welcome-nav-gap));
 
     >.fake {
       visibility: hidden;
