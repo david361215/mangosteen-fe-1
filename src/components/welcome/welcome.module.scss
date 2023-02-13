@@ -1,0 +1,36 @@
+.card {
+  background: var(--welcome-card-bg);
+  border-radius: 8px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  >h2 {
+    padding-top: 40px;
+    font-size: 32px;
+  }
+}
+
+.actions {
+  color: var(--welcome-text);
+  background: var(--welcome-bg-end);
+  font-weight: bold;
+  position: fixed;
+  z-index: var(--z-index-bottom-nav);
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--welcome-nav-height);
+  padding: 0 16px var(--welcome-nav-gap) 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  line-height: calc(var(--welcome-nav-height) - var(--welcome-nav-gap));
+
+  >.fake {
+    visibility: hidden;
+  }
+}
