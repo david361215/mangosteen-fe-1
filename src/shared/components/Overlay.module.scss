@@ -1,0 +1,53 @@
+.mask {
+  background: var(--overlay-mask-bg);
+  position: fixed;
+  z-index: var(--z-index-overlay);
+  top: var(--top-safe-area-height);
+  left: 0;
+  width: 100%;
+  height: calc(100% - var(--top-safe-area-height));
+}
+
+.overlay {
+  background: var(--overlay-bg);
+  position: fixed;
+  z-index: calc(var(--z-index-overlay) + 1);
+  top: var(--top-safe-area-height);
+  left: 0;
+  width: 20em;
+  height: calc(100% - var(--top-safe-area-height));
+
+  >.currentUser {
+    background: var(--overlay-user-bg);
+    height: 128px;
+    padding: 32px 16px;
+
+    >h2 {
+      color: white;
+      font-size: 24px;
+    }
+
+    >p {
+      color: var(--overlay-user-text);
+      margin-top: 8px;
+    }
+  }
+
+  .action {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 16px;
+
+    &_list {
+      padding: 24px 16px;
+      font-size: 20px;
+    }
+
+    >.icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 24px;
+    }
+  }
+}
