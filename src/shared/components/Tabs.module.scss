@@ -6,9 +6,9 @@
     position: sticky;
     z-index: 1;
     top: 0;
+    background: var(--welcome-bg-end);
 
     >li {
-      background: var(--welcome-bg-end);
       color: var(--navbar-text);
       flex: 1 0 auto;
       padding: 12px 0;
