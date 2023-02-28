@@ -1,6 +1,11 @@
 .tabs {
+  position: relative;
+
   &_nav {
     display: flex;
+    position: sticky;
+    z-index: 1;
+    top: 0;
 
     >li {
       background: var(--welcome-bg-end);
