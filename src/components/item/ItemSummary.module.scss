@@ -1,0 +1,75 @@
+.total {
+  background: var(--total-bg);
+  color: var(--total-text);
+  border-radius: var(--button-radius);
+  margin: 16px 16px 26px 16px;
+  padding: 8px 32px;
+  display: flex;
+  justify-content: space-between;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    &:first-child {
+      color: var(--total-income);
+    }
+
+    &:nth-child(2) {
+      color: var(--total-expenses);
+    }
+  }
+}
+
+.list {
+  >li {
+    border-bottom: 1px solid var(--button-border-color);
+    padding: 8px 16px 16px 24px;
+    display: flex;
+  }
+
+  .sign {
+    flex-shrink: 0;
+    background: var(--tag-bg);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    margin-right: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .text {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+
+    .tagAndAmount {
+      display: flex;
+      flex-direction: column;
+
+      .tag {
+        color: var(--list-tag-text);
+        margin-bottom: 4px;
+      }
+
+      .amount {
+        color: var(--list-amount-text);
+      }
+    }
+
+    .time {
+      color: var(--list-time-text);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.more {
+  padding-top: 32px;
+  text-align: center;
+}
