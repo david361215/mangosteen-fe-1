@@ -2,10 +2,10 @@ import { Overlay } from 'vant';
 import { defineComponent, PropType, reactive, ref } from 'vue';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Form, FormItem } from '../../shared/components/Form';
-import { Icon } from '../../shared/components/Icon';
 import { Tab, Tabs } from '../../shared/components/Tabs';
 import { Time } from '../../shared/Time';
 import { ItemSummary } from './ItemSummary';
+import { OverlayIcon } from '../../shared/components/Overlay';
 import s from './ItemList.module.scss';
 export const ItemList = defineComponent({
   props: {
@@ -45,7 +45,7 @@ export const ItemList = defineComponent({
       <MainLayout>{
         {
           title: () => '山竹记账',
-          icon: () => <Icon name="menu" />,
+          icon: () => <OverlayIcon />,
           default: () => <>
             <Tabs classPrefix={'customTabs'}
               v-model:selected={refSelected.value}

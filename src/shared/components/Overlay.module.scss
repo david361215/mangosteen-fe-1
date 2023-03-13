@@ -16,6 +16,7 @@
   left: 0;
   width: 20em;
   height: calc(100% - var(--top-safe-area-height));
+  color: var(--text);
 
   >.currentUser {
     background: var(--overlay-user-bg);
@@ -50,4 +51,11 @@
       margin-right: 24px;
     }
   }
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  top: 1px;
 }
