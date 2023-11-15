@@ -12,5 +12,8 @@ export default defineConfig({
       mergeProps: true
     }),
     svgstore(),
-  ]
+  ],
+  server: {
+    port: 5167
+  }
 })
