@@ -14,6 +14,11 @@ export default defineConfig({
     svgstore(),
   ],
   server: {
-    port: 5167
+    port: 5167,
+    proxy: {
+      '/api/v1': {
+        target: 'http://121.196.236.94:3000/',
+      }
+    }
   }
 })
