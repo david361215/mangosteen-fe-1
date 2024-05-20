@@ -6,6 +6,11 @@
   font-size: var(--button-font-size);
   height: var(--button-height);
 
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &.normal {}
 
   &.important {}
