@@ -3,10 +3,11 @@ import { MainLayout } from '../layouts/MainLayout';
 import { Button } from '../shared/components/Button';
 import { Form, FormItem } from '../shared/components/Form';
 import { Icon } from '../shared/components/Icon';
-import { validate } from '../shared/validate';
+import { hasError, validate } from '../shared/validate';
 import s from './SignInPage.module.scss';
 import { httpClient } from '../shared/HttpClient';
 import { useBool } from '../hooks/useBool';
+import { history } from '../shared/history';
 export const SignInPage = defineComponent({
   setup: (props, context) => {
     const formData = reactive({
@@ -19,7 +20,7 @@ export const SignInPage = defineComponent({
     })
     const refValidationCode = ref<any>()
     const { ref: refDisabled, toggle, on: disabled, off: enable } = useBool(false)
-    const onSubmit = (e: Event) => {
+    const onSubmit = async (e: Event) => {
       e.preventDefault()
       Object.assign(errors, {
         email: [],
@@ -30,6 +31,11 @@ export const SignInPage = defineComponent({
         { key: 'email', type: 'pattern', regex: /.+@.+/, message: '必须是邮箱地址' },
         { key: 'code', type: 'required', message: '必填' }
       ]))
+      if (!hasError(errors)) {
+        const response = await httpClient.post<{ jwt: string }>('/session', formData)
+        localStorage.setItem('jwt', response.data.jwt)
+        history.push('/')
+      }
     }
     const onError = (error: any) => {
       if (error.response.status === 422) {
@@ -67,7 +73,7 @@ export const SignInPage = defineComponent({
                   onClick={onClickSendValidationCode}
                   v-model={formData.code} error={errors.code?.[0]} />
                 <FormItem style={{ paddingTop: '96px' }}>
-                  <Button>登录</Button>
+                  <Button type="submit">登录</Button>
                 </FormItem>
               </Form>
             </div>
