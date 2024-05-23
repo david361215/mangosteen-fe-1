@@ -10,16 +10,28 @@ import { fetchMe, mePromise } from './shared/me';
 const router = createRouter({ history, routes })
 
 fetchMe()
-router.beforeEach(async (to, from) => {
-  if (to.path === '/' || to.path.startsWith('/welcome') || to.path.startsWith('/sign_in') || to.path === '/start') {
-    return true
-  } else {
-    const path = await mePromise!.then(
-      () => true,
-      () => '/sign_in?return_to=' + to.path
-    )
-    return path
+
+const whitelist: Record<string, 'exact' | 'startsWith'> = {
+  '/': 'exact',
+  '/start': 'exact',
+  '/welcome': 'startsWith',
+  '/sign_in': 'startsWith',
+}
+
+router.beforeEach((to, from) => {
+  for (const key in whitelist) {
+    const value = whitelist[key]
+    if (value === 'exact' && to.path === key) {
+      return true
+    }
+    if (value === 'startsWith' && to.path.startsWith(key)) {
+      return true
+    }
   }
+  return mePromise!.then(
+    () => true,
+    () => '/sign_in?return_to=' + to.path
+  )
 })
 
 const app = createApp(App)
