@@ -28,8 +28,15 @@ export class HttpClient {
 
 export const httpClient = new HttpClient('/api/v1')
 
+httpClient.instance.interceptors.request.use(config => {
+  const jwt = localStorage.getItem('jwt')
+  if (jwt) {
+    config.headers!.Authorization = `Bearer ${jwt}`
+  }
+  return config
+})
+
 httpClient.instance.interceptors.response.use(response => {
-  console.log('response')
   return response
 }, (error) => {
   if (error.response) {
