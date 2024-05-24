@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { mockSession } from "../mock/mock";
+import { mockSession, mockTagIndex } from "../mock/mock";
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
 type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>

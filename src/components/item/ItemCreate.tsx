@@ -1,9 +1,10 @@
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, onMounted, PropType, ref } from 'vue';
 import { MainLayout } from '../../layouts/MainLayout';
 import { Icon } from '../../shared/components/Icon';
 import { Tab, Tabs } from '../../shared/components/Tabs';
 import { InputPad } from './InputPad';
 import s from './ItemCreate.module.scss';
+import { httpClient } from '../../shared/HttpClient';
 
 export const ItemCreate = defineComponent({
   props: {
@@ -13,60 +14,22 @@ export const ItemCreate = defineComponent({
   },
   setup: (props, context) => {
     const refKind = ref('支出')
-    const refExpensesTags = ref([
-      { id: 1, name: '餐费', sign: '￥', category: 'expenses' },
-      { id: 2, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 3, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 4, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 5, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 6, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 7, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 8, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 9, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 10, name: '聚餐', sign: '￥', category: 'expenses' },
-    ])
-    const refIncomeTags = ref([
-      { id: 11, name: '工资', sign: '￥', category: 'income' },
-      { id: 12, name: '彩票', sign: '￥', category: 'income' },
-      { id: 13, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 14, name: '私活', sign: '￥', category: 'income' },
-      { id: 15, name: '朴朴', sign: '￥', category: 'income' },
-      { id: 16, name: '美团', sign: '￥', category: 'income' },
-      { id: 17, name: '家政', sign: '￥', category: 'income' },
-      { id: 18, name: '家教', sign: '￥', category: 'income' },
-      { id: 19, name: '黄牛', sign: '￥', category: 'income' },
-      { id: 20, name: '创业', sign: '￥', category: 'income' },
-      { id: 11, name: '工资', sign: '￥', category: 'income' },
-      { id: 12, name: '彩票', sign: '￥', category: 'income' },
-      { id: 13, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 14, name: '私活', sign: '￥', category: 'income' },
-      { id: 15, name: '朴朴', sign: '￥', category: 'income' },
-      { id: 16, name: '美团', sign: '￥', category: 'income' },
-      { id: 17, name: '家政', sign: '￥', category: 'income' },
-      { id: 18, name: '家教', sign: '￥', category: 'income' },
-      { id: 19, name: '黄牛', sign: '￥', category: 'income' },
-      { id: 20, name: '创业', sign: '￥', category: 'income' },
-      { id: 11, name: '工资', sign: '￥', category: 'income' },
-      { id: 12, name: '彩票', sign: '￥', category: 'income' },
-      { id: 13, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 14, name: '私活', sign: '￥', category: 'income' },
-      { id: 15, name: '朴朴', sign: '￥', category: 'income' },
-      { id: 16, name: '美团', sign: '￥', category: 'income' },
-      { id: 17, name: '家政', sign: '￥', category: 'income' },
-      { id: 18, name: '家教', sign: '￥', category: 'income' },
-      { id: 19, name: '黄牛', sign: '￥', category: 'income' },
-      { id: 20, name: '创业', sign: '￥', category: 'income' },
-      { id: 11, name: '工资', sign: '￥', category: 'income' },
-      { id: 12, name: '彩票', sign: '￥', category: 'income' },
-      { id: 13, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 14, name: '私活', sign: '￥', category: 'income' },
-      { id: 15, name: '朴朴', sign: '￥', category: 'income' },
-      { id: 16, name: '美团', sign: '￥', category: 'income' },
-      { id: 17, name: '家政', sign: '￥', category: 'income' },
-      { id: 18, name: '家教', sign: '￥', category: 'income' },
-      { id: 19, name: '黄牛', sign: '￥', category: 'income' },
-      { id: 20, name: '创业', sign: '￥', category: 'income' },
-    ])
+    onMounted(async () => {
+      const response = await httpClient.get<{ resources: Tag[] }>('/tags', {
+        kind: 'expenses',
+        _mock: 'tagIndex'
+      })
+      refExpensesTags.value = response.data.resources
+    })
+    const refExpensesTags = ref<Tag[]>([])
+    onMounted(async () => {
+      const response = await httpClient.get<{ resources: Tag[] }>('/tags', {
+        kind: 'income',
+        _mock: 'tagIndex'
+      })
+      refIncomeTags.value = response.data.resources
+    })
+    const refIncomeTags = ref<Tag[]>([])
     return () => (
       <MainLayout>{
         {
