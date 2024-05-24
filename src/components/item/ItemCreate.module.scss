@@ -8,6 +8,15 @@
   flex-direction: column;
   height: calc(100vh - 88px);
 
+  .more {
+    padding: 16px;
+    text-align: center;
+
+    .loadMore {
+      padding: 0 16px;
+    }
+  }
+
   .tabs {
     flex-grow: 1;
     flex-shrink: 1;
