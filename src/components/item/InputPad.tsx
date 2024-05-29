@@ -7,7 +7,10 @@ import s from './InputPad.module.scss';
 export const InputPad = defineComponent({
   props: {
     happenAt: String,
-    amount: Number
+    amount: Number,
+    onSubmit: {
+      type: Function as PropType<() => void>
+    }  
   },
   emits:['update:happenAt','update:amount'],
   setup: (props, context) => {
@@ -59,9 +62,12 @@ export const InputPad = defineComponent({
       { text: '.', onclick: () => { appendText('.') } },
       { text: '0', onclick: () => { appendText(0) } },
       { text: '清空', onclick: () => { refAmount.value = '0' } },
-      { text: '提交', onclick: () => {
-        context.emit('update:amount', parseFloat(refAmount.value) * 100)
-      } },
+      { text: '提交',         
+        onclick: () => {
+          context.emit('update:amount', parseFloat(refAmount.value) * 100)
+          props.onSubmit?.()
+        }
+      },
       { text: '删除', onclick: () => { removeText() } }
     ]
     return () => (<>

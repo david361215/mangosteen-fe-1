@@ -13,10 +13,10 @@ export const Tags = defineComponent({
     },
     selected: Number
   },
-  emits: ['update: selected'],
+  emits: ['update:selected'],
   setup: (props, context) => {
     const onSelect = (tag: Tag) => {
-      context.emit('update: selected', tag.id)
+      context.emit('update:selected', tag.id)
     }
     const { tags, hasMore, fetchTags } = uesTags((page) => {
       return httpClient.get<Resources<Tag>>('/tags', {

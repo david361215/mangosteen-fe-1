@@ -31,7 +31,7 @@
       margin-top: 5px;
     }
 
-    .selected {
+    &.selected {
       .sign {
         border-color: var(--main);
       }
