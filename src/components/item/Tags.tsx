@@ -1,10 +1,10 @@
-import { defineComponent, PropType, ref } from 'vue';
-import s from './Tags.module.scss';
-import { Icon } from '../../shared/components/Icon';
-import { uesTags } from '../../shared/useTags';
-import { httpClient } from '../../shared/HttpClient';
-import { Button } from '../../shared/components/Button';
-import { RouterLink } from 'vue-router';
+import { defineComponent, PropType, ref } from 'vue'
+import s from './Tags.module.scss'
+import { Icon } from '../../shared/components/Icon'
+import { uesTags } from '../../shared/useTags'
+import { httpClient } from '../../shared/HttpClient'
+import { Button } from '../../shared/components/Button'
+import { RouterLink, useRouter } from 'vue-router'
 
 export const Tags = defineComponent({
   props: {
@@ -17,42 +17,46 @@ export const Tags = defineComponent({
   emits: ['update:selected'],
   setup: (props, context) => {
     const onSelect = (tag: Tag) => {
-      context.emit('update:selected', tag.id);
-    };
-    const timer = ref<number>();
-    const currentTag = ref<HTMLDivElement>();
+      context.emit('update:selected', tag.id)
+    }
+    const timer = ref<number>()
+    const currentTag = ref<HTMLDivElement>()
 
-    const onLongPress = () => {
-      console.log('长按');
-    };
-    const onTouchStart = (e: TouchEvent) => {
-      currentTag.value = e.currentTarget as HTMLDivElement;
+    const router = useRouter()
+
+    const onLongPress = (tagId: Tag['id']) => {
+      router.push(
+        `/tags/${tagId}/edit?kind=${props.kind}&return_to=${router.currentRoute.value.fullPath}`,
+      )
+    }
+    const onTouchStart = (e: TouchEvent, tag: Tag) => {
+      currentTag.value = e.currentTarget as HTMLDivElement
       timer.value = setTimeout(() => {
-        onLongPress();
-      }, 500);
-    };
+        onLongPress(tag.id)
+      }, 500)
+    }
     const onTouchEnd = (e: TouchEvent) => {
-      clearTimeout(timer.value);
-    };
+      clearTimeout(timer.value)
+    }
     const onTouchMove = (e: TouchEvent) => {
       const pointedElement = document.elementFromPoint(
         e.touches[0].clientX,
         e.touches[0].clientY,
-      );
+      )
       if (
         currentTag.value !== pointedElement &&
         currentTag.value?.contains(pointedElement) === false
       ) {
-        clearTimeout(timer.value);
+        clearTimeout(timer.value)
       }
-    };
+    }
     const { tags, hasMore, fetchTags } = uesTags((page) => {
       return httpClient.get<Resources<Tag>>('/tags', {
         kind: props.kind,
         page: page + 1,
         _mock: 'tagIndex',
-      });
-    });
+      })
+    })
     return () => (
       <>
         <div class={s.tags_wrapper} onTouchmove={onTouchMove}>
@@ -66,7 +70,7 @@ export const Tags = defineComponent({
             <div
               class={[s.tag, props.selected === tag.id ? s.selected : '']}
               onClick={() => onSelect(tag)}
-              onTouchstart={onTouchStart}
+              onTouchstart={(e) => onTouchStart(e, tag)}
               onTouchend={onTouchEnd}
             >
               <div class={s.sign}>{tag.sign}</div>
@@ -84,6 +88,6 @@ export const Tags = defineComponent({
           )}
         </div>
       </>
-    );
+    )
   },
-});
+})
