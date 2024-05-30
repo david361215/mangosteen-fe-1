@@ -1,57 +1,80 @@
 import { defineComponent, PropType, reactive } from 'vue';
 import { Form, FormItem } from '../../shared/components/Form';
 import { Button } from '../../shared/components/Button';
-import { EmojiSelect } from '../../shared/components/EmojiSelect';
-import { Rules, validate } from '../../shared/validate';
+import { hasError, Rules, validate } from '../../shared/validate';
 import s from './Tag.module.scss';
+import { useRoute, useRouter } from 'vue-router';
+import { httpClient } from '../../shared/HttpClient';
+import { onFormError } from '../../shared/onFormError';
 export const TagForm = defineComponent({
   props: {
     name: {
-      type: String as PropType<string>
-    }
+      type: String as PropType<string>,
+    },
   },
   setup: (props, context) => {
+    const route = useRoute();
+    const router = useRouter();
     const formData = reactive({
       name: '',
       sign: '',
-    })
-    const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({})
-    const onSubmit = (e: Event) => {
+      kind: route.query.kind!.toString(),
+    });
+    const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({});
+    const onSubmit = async (e: Event) => {
+      //取消提交表单
+      e.preventDefault();
       const rules: Rules<typeof formData> = [
         { key: 'name', type: 'required', message: '必填' },
-        { key: 'name', type: 'pattern', regex: /^[\u4e00-\u9fa5]{1,4}$/, message: '只能填 1 到 4 个汉字' },
+        {
+          key: 'name',
+          type: 'pattern',
+          regex: /^[\u4e00-\u9fa5]{1,4}$/,
+          message: '只能填 1 到 4 个汉字',
+        },
         { key: 'sign', type: 'required', message: '必填' },
-      ]
+      ];
       //清空 errors，否则每次都展示同样内容
       Object.assign(errors, {
-        name: undefined,
-        sign: undefined
-      })
+        name: [],
+        sign: [],
+      });
       //因为 errors 是常量，所以不能直接把 validate(formData, rules) 赋值给 errors
-      Object.assign(errors, validate(formData, rules))
-      //取消提交表单
-      e.preventDefault()
-    }
+      Object.assign(errors, validate(formData, rules));
+      if (!hasError(errors)) {
+        const response = await httpClient
+          .post('/tags', formData, {
+            params: { _mock: 'tagCreate' },
+          })
+          .catch((error) =>
+            onFormError(error, (data) => Object.assign(errors, data.errors)),
+          );
+        router.back();
+      }
+    };
     return () => (
       <Form onSubmit={onSubmit}>
         <FormItem
-          label='标签名'
-          type='text'
+          label="标签名（最多 4 个字符）"
+          type="text"
           v-model={formData.name}
-          error={errors['name']?.[0]} />
+          error={errors['name']?.[0]}
+        />
         <FormItem
           label={'符号' + formData.sign}
-          type='emojiSelect'
+          type="emojiSelect"
           v-model={formData.sign}
-          error={errors['sign']?.[0]} />
+          error={errors['sign']?.[0]}
+        />
         <FormItem>
           <p class={s.tips}>记账时长按标签即可进行编辑</p>
         </FormItem>
         <FormItem>
-          <Button class={s.button}>确定</Button>
+          <Button type="submit" class={s.button}>
+            确定
+          </Button>
         </FormItem>
       </Form>
-    )
-  }
-})
-
+    );
+  },
+});
