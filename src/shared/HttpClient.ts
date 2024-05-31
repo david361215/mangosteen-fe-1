@@ -3,25 +3,27 @@ import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
-} from 'axios';
+} from 'axios'
 import {
   mockItemCreate,
   mockSession,
   mockTagIndex,
   mockTagCreate,
-} from '../mock/mock';
+  mockTagShow,
+  mockTagEdit,
+} from '../mock/mock'
 
-type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>;
-type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>;
-type PatchConfig = Omit<AxiosRequestConfig, 'url' | 'data'>;
-type DeleteConfig = Omit<AxiosRequestConfig, 'params'>;
+type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
+type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
+type PatchConfig = Omit<AxiosRequestConfig, 'url' | 'data'>
+type DeleteConfig = Omit<AxiosRequestConfig, 'params'>
 
 export class HttpClient {
-  instance: AxiosInstance;
+  instance: AxiosInstance
   constructor(baseURL: string) {
     this.instance = axios.create({
       baseURL,
-    });
+    })
   }
 
   get<R = unknown>(
@@ -34,7 +36,7 @@ export class HttpClient {
       url: url,
       params: query,
       method: 'get',
-    });
+    })
   }
 
   post<R = unknown>(
@@ -42,7 +44,7 @@ export class HttpClient {
     data?: Record<string, JSONValue>,
     config?: PostConfig,
   ) {
-    return this.instance.request<R>({ ...config, url, data, method: 'post' });
+    return this.instance.request<R>({ ...config, url, data, method: 'post' })
   }
 
   patch<R = unknown>(
@@ -50,7 +52,7 @@ export class HttpClient {
     data?: Record<string, JSONValue>,
     config?: PatchConfig,
   ) {
-    return this.instance.request<R>({ ...config, url, data, method: 'patch' });
+    return this.instance.request<R>({ ...config, url, data, method: 'patch' })
   }
 
   delete<R = unknown>(
@@ -63,7 +65,7 @@ export class HttpClient {
       url: url,
       params: query,
       method: 'delete',
-    });
+    })
   }
 }
 
@@ -73,63 +75,69 @@ const mock = (response: AxiosResponse) => {
     location.hostname !== '127.0.0.1' &&
     location.hostname !== '192.168.3.57'
   ) {
-    return false;
+    return false
   }
   switch (response.config?.params?._mock) {
     case 'tagIndex':
-      [response.status, response.data] = mockTagIndex(response.config);
-      return true;
+      ;[response.status, response.data] = mockTagIndex(response.config)
+      return true
     case 'session':
-      [response.status, response.data] = mockSession(response.config);
-      return true;
+      ;[response.status, response.data] = mockSession(response.config)
+      return true
     case 'itemCreate':
-      [response.status, response.data] = mockItemCreate(response.config);
-      return true;
+      ;[response.status, response.data] = mockItemCreate(response.config)
+      return true
     case 'tagCreate':
-      [response.status, response.data] = mockTagCreate(response.config);
-      return true;
+      ;[response.status, response.data] = mockTagCreate(response.config)
+      return true
+    case 'tagEdit':
+      ;[response.status, response.data] = mockTagEdit(response.config)
+      return true
+    case 'tagShow':
+      ;[response.status, response.data] = mockTagShow(response.config)
+      return true
   }
-  return false;
-};
+  return false
+}
 
-export const httpClient = new HttpClient('/api/v1');
+export const httpClient = new HttpClient('/api/v1')
 
 httpClient.instance.interceptors.request.use((config) => {
-  const jwt = localStorage.getItem('jwt');
+  const jwt = localStorage.getItem('jwt')
   if (jwt) {
-    config.headers!.Authorization = `Bearer ${jwt}`;
+    config.headers!.Authorization = `Bearer ${jwt}`
   }
-  return config;
-});
+  return config
+})
 
 httpClient.instance.interceptors.response.use(
   (response) => {
-    mock(response);
+    mock(response)
     if (response.status >= 400) {
-      throw { response };
+      throw { response }
     } else {
-      return response;
+      return response
     }
   },
   (error) => {
-    mock(error.response);
+    mock(error.response)
     if (error.response.status >= 400) {
-      throw error;
+      throw error
     } else {
-      return error.response;
+      return error.response
     }
   },
-);
+)
 
 httpClient.instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const axiosError = error as AxiosError;
+      const axiosError = error as AxiosError
       if (axiosError.response?.status === 429) {
-        alert('你太频繁了');
+        alert('你太频繁了')
       }
     }
-    throw error;
+    throw error
   },
-);
+)
