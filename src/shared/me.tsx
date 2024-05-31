@@ -1,14 +1,10 @@
-import { AxiosResponse } from "axios";
-import { httpClient } from "./HttpClient";
+import { AxiosResponse } from 'axios'
+import { httpClient } from './HttpClient'
 
-export let mePromise: Promise<AxiosResponse<{
-  resource: {
-    id: number;
-  };
-}>> | undefined
+export let mePromise: Promise<AxiosResponse<Resource<User>>> | undefined
 
 export const refreshMe = () => {
-  mePromise = httpClient.get<{ resource: { id: number } }>('/me')
+  mePromise = httpClient.get<Resource<User>>('/me')
   return mePromise
 }
 

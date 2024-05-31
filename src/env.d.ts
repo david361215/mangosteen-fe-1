@@ -28,6 +28,11 @@ type Tag = {
   kind: expenses | income
 }
 
+type User = {
+  id: number
+  email: string
+}
+
 type Item = {
   id: number
   user_id: number

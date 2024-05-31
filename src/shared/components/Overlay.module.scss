@@ -7,7 +7,11 @@
   width: 100%;
   height: calc(100% - var(--top-safe-area-height));
 }
-
+.email {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .overlay {
   background: var(--overlay-bg);
   position: fixed;
@@ -18,17 +22,17 @@
   height: calc(100% - var(--top-safe-area-height));
   color: var(--text);
 
-  >.currentUser {
+  > .currentUser {
     background: var(--overlay-user-bg);
     height: 128px;
     padding: 32px 16px;
 
-    >h2 {
+    > h2 {
       color: white;
       font-size: 24px;
     }
 
-    >p {
+    > p {
       color: var(--overlay-user-text);
       margin-top: 8px;
     }
@@ -45,7 +49,7 @@
       font-size: 20px;
     }
 
-    >.icon {
+    > .icon {
       width: 36px;
       height: 36px;
       margin-right: 24px;
