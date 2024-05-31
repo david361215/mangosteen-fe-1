@@ -11,6 +11,7 @@ import {
   mockTagCreate,
   mockTagShow,
   mockTagEdit,
+  mockItemIndex,
 } from '../mock/mock'
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
@@ -86,6 +87,9 @@ const mock = (response: AxiosResponse) => {
       return true
     case 'itemCreate':
       ;[response.status, response.data] = mockItemCreate(response.config)
+      return true
+    case 'itemIndex':
+      ;[response.status, response.data] = mockItemIndex(response.config)
       return true
     case 'tagCreate':
       ;[response.status, response.data] = mockTagCreate(response.config)
