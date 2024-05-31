@@ -3,6 +3,8 @@ import s from './ItemSummary.module.scss'
 import { httpClient } from '../../shared/HttpClient'
 import { Button } from '../../shared/components/Button'
 import { FloatButton } from '../../shared/components/FloatButton'
+import { Money } from '../../shared/Money'
+import { Datetime } from '../../shared/Datetime'
 export const ItemSummary = defineComponent({
   props: {
     startDate: {
@@ -62,9 +64,13 @@ export const ItemSummary = defineComponent({
                   <div class={s.text}>
                     <div class={s.tagAndAmount}>
                       <span class={s.tag}>{item.tags_id[0]}</span>
-                      <span class={s.amount}>￥{item.amount}</span>
+                      <span class={s.amount}>
+                        ￥<Money value={item.amount} />
+                      </span>
                     </div>
-                    <div class={s.time}>{item.happened_at}</div>
+                    <div class={s.time}>
+                      <Datetime value={item.happened_at} />
+                    </div>
                   </div>
                 </li>
               ))}

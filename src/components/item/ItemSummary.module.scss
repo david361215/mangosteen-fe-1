@@ -23,7 +23,7 @@
 }
 
 .list {
-  >li {
+  > li {
     border-bottom: 1px solid var(--button-border-color);
     padding: 8px 16px 16px 24px;
     display: flex;
@@ -44,11 +44,11 @@
   .text {
     flex-grow: 1;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 
     .tagAndAmount {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
 
       .tag {
         color: var(--list-tag-text);
