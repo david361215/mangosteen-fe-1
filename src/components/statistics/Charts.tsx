@@ -5,40 +5,48 @@ import { Bars } from './Bars'
 import { LineChart } from './LineChart'
 import { PieChart } from './PieChart'
 import { httpClient } from '../../shared/HttpClient'
+import { Time } from '../../shared/Time'
 
 type Data1Item = { happened_at: string; amount: number }
 type Data1 = Data1Item[]
+const DAY = 24 * 3600 * 1000
 
 export const Charts = defineComponent({
   props: {
     startDate: {
       type: String as PropType<string>,
-      required: false,
+      required: false
     },
     endDate: {
       type: String as PropType<string>,
-      required: false,
-    },
+      required: false
+    }
   },
   setup: (props, context) => {
     const kind = ref('expenses')
     const data1 = ref<Data1>([])
-    const betterData1 = computed(() => {
-      return data1.value.map(
-        (item) => [item.happened_at, item.amount] as [string, number],
-      )
+    const betterData1 = computed<[string, number][]>(() => {
+      if (!props.startDate || !props.endDate) {
+        return []
+      }
+      const array = []
+      const diff = new Date(props.endDate).getTime() - new Date(props.startDate).getTime()
+      const n = diff / DAY + 1
+      return Array.from({ length: n }).map((_, i) => {
+        const time = new Time(props.startDate + 'T00:00:00.000+0800').add(i, 'day').getTimestamp()
+        const item = data1.value[0]
+        const amount = item && new Date(item.happened_at).getTime() === time ? data1.value.shift()!.amount : 0
+        return [new Date(time).toISOString(), amount]
+      })
     })
 
     onMounted(async () => {
-      const response = await httpClient.get<{ groups: Data1; summary: number }>(
-        '/items/summary',
-        {
-          happen_after: props.startDate,
-          happen_before: props.endDate,
-          kind: kind.value,
-          _mock: 'itemSummary',
-        },
-      )
+      const response = await httpClient.get<{ groups: Data1; summary: number }>('/items/summary', {
+        happen_after: props.startDate,
+        happen_before: props.endDate,
+        kind: kind.value,
+        _mock: 'itemSummary'
+      })
       data1.value = response.data.groups
     })
     return () => (
@@ -48,7 +56,7 @@ export const Charts = defineComponent({
           type="select"
           options={[
             { value: 'expenses', text: '支出' },
-            { value: 'income', text: '收入' },
+            { value: 'income', text: '收入' }
           ]}
           v-model={kind.value}
         />
@@ -57,5 +65,5 @@ export const Charts = defineComponent({
         <Bars />
       </div>
     )
-  },
+  }
 })
