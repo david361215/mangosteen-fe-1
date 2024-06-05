@@ -44,11 +44,14 @@
     margin-left: 16px;
   }
 
+  &_name {
+    line-height: 1.2;
+  }
   &_value {
     display: flex;
     margin-top: 4px;
 
-    >* {
+    > * {
       flex-grow: 1;
     }
   }

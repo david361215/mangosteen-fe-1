@@ -10,9 +10,9 @@ export const Tags = defineComponent({
   props: {
     kind: {
       type: String as PropType<string>,
-      required: true,
+      required: true
     },
-    selected: Number,
+    selected: Number
   },
   emits: ['update:selected'],
   setup: (props, context) => {
@@ -25,9 +25,7 @@ export const Tags = defineComponent({
     const router = useRouter()
 
     const onLongPress = (tagId: Tag['id']) => {
-      router.push(
-        `/tags/${tagId}/edit?kind=${props.kind}&return_to=${router.currentRoute.value.fullPath}`,
-      )
+      router.push(`/tags/${tagId}/edit?kind=${props.kind}&return_to=${router.currentRoute.value.fullPath}`)
     }
     const onTouchStart = (e: TouchEvent, tag: Tag) => {
       currentTag.value = e.currentTarget as HTMLDivElement
@@ -39,23 +37,23 @@ export const Tags = defineComponent({
       clearTimeout(timer.value)
     }
     const onTouchMove = (e: TouchEvent) => {
-      const pointedElement = document.elementFromPoint(
-        e.touches[0].clientX,
-        e.touches[0].clientY,
-      )
-      if (
-        currentTag.value !== pointedElement &&
-        currentTag.value?.contains(pointedElement) === false
-      ) {
+      const pointedElement = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)
+      if (currentTag.value !== pointedElement && currentTag.value?.contains(pointedElement) === false) {
         clearTimeout(timer.value)
       }
     }
     const { tags, hasMore, fetchTags } = uesTags((page) => {
-      return httpClient.get<Resources<Tag>>('/tags', {
-        kind: props.kind,
-        page: page + 1,
-        _mock: 'tagIndex',
-      })
+      return httpClient.get<Resources<Tag>>(
+        '/tags',
+        {
+          kind: props.kind,
+          page: page + 1
+        },
+        {
+          _mock: 'tagIndex',
+          _autoLoading: true
+        }
+      )
     })
     return () => (
       <>
@@ -89,5 +87,5 @@ export const Tags = defineComponent({
         </div>
       </>
     )
-  },
+  }
 })

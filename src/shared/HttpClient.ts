@@ -1,9 +1,4 @@
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import {
   mockItemCreate,
   mockSession,
@@ -13,8 +8,9 @@ import {
   mockTagEdit,
   mockItemIndex,
   mockItemIndexBalance,
-  mockItemSummary,
+  mockItemSummary
 } from '../mock/mock'
+import { Toast } from 'vant'
 
 type GetConfig = Omit<AxiosRequestConfig, 'params' | 'url' | 'method'>
 type PostConfig = Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>
@@ -25,62 +21,42 @@ export class HttpClient {
   instance: AxiosInstance
   constructor(baseURL: string) {
     this.instance = axios.create({
-      baseURL,
+      baseURL
     })
   }
 
-  get<R = unknown>(
-    url: string,
-    query?: Record<string, JSONValue>,
-    config?: GetConfig,
-  ) {
+  get<R = unknown>(url: string, query?: Record<string, JSONValue>, config?: GetConfig) {
     return this.instance.request<R>({
       ...config,
       url: url,
       params: query,
-      method: 'get',
+      method: 'get'
     })
   }
 
-  post<R = unknown>(
-    url: string,
-    data?: Record<string, JSONValue>,
-    config?: PostConfig,
-  ) {
+  post<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PostConfig) {
     return this.instance.request<R>({ ...config, url, data, method: 'post' })
   }
 
-  patch<R = unknown>(
-    url: string,
-    data?: Record<string, JSONValue>,
-    config?: PatchConfig,
-  ) {
+  patch<R = unknown>(url: string, data?: Record<string, JSONValue>, config?: PatchConfig) {
     return this.instance.request<R>({ ...config, url, data, method: 'patch' })
   }
 
-  delete<R = unknown>(
-    url: string,
-    query?: Record<string, string>,
-    config?: DeleteConfig,
-  ) {
+  delete<R = unknown>(url: string, query?: Record<string, string>, config?: DeleteConfig) {
     return this.instance.request<R>({
       ...config,
       url: url,
       params: query,
-      method: 'delete',
+      method: 'delete'
     })
   }
 }
 
 const mock = (response: AxiosResponse) => {
-  if (
-    location.hostname !== 'localhost' &&
-    location.hostname !== '127.0.0.1' &&
-    location.hostname !== '192.168.3.57'
-  ) {
+  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '192.168.3.57') {
     return false
   }
-  switch (response.config?.params?._mock) {
+  switch (response.config?._mock) {
     case 'tagIndex':
       ;[response.status, response.data] = mockTagIndex(response.config)
       return true
@@ -119,8 +95,30 @@ httpClient.instance.interceptors.request.use((config) => {
   if (jwt) {
     config.headers!.Authorization = `Bearer ${jwt}`
   }
+  if (config._autoLoading === true) {
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+      duration: 0
+    })
+  }
   return config
 })
+
+httpClient.instance.interceptors.response.use(
+  (response) => {
+    if (response.config._autoLoading === true) {
+      Toast.clear()
+    }
+    return response
+  },
+  (error: AxiosError) => {
+    if (error.response?.config._autoLoading === true) {
+      Toast.clear()
+    }
+    throw error
+  }
+)
 
 httpClient.instance.interceptors.response.use(
   (response) => {
@@ -138,7 +136,7 @@ httpClient.instance.interceptors.response.use(
     } else {
       return error.response
     }
-  },
+  }
 )
 
 httpClient.instance.interceptors.response.use(
@@ -151,5 +149,5 @@ httpClient.instance.interceptors.response.use(
       }
     }
     throw error
-  },
+  }
 )
