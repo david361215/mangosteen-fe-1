@@ -1,11 +1,11 @@
-import 'vant/lib/index.css';
+import 'vant/lib/index.css'
 import { createApp } from 'vue'
 import { App } from './App'
 import { createRouter } from 'vue-router'
-import { routes } from './config/routes';
-import { history } from './shared/history';
-import '@svgstore';
-import { fetchMe, mePromise } from './shared/me';
+import { routes } from './config/routes'
+import { history } from './shared/history'
+import '@svgstore'
+import { fetchMe, mePromise } from './shared/me'
 
 const router = createRouter({ history, routes })
 
@@ -13,9 +13,9 @@ fetchMe()
 
 const whitelist: Record<string, 'exact' | 'startsWith'> = {
   '/': 'exact',
-  '/start': 'exact',
+  '/items': 'exact',
   '/welcome': 'startsWith',
-  '/sign_in': 'startsWith',
+  '/sign_in': 'startsWith'
 }
 
 router.beforeEach((to, from) => {
@@ -40,28 +40,28 @@ app.mount('#app')
 
 // 如下代码是禁止用户在 ios 上双手缩放页面
 document.documentElement.addEventListener(
-  "touchstart",
+  'touchstart',
   function (event) {
     if (event.touches.length > 1) {
-      event.preventDefault();
+      event.preventDefault()
     }
   },
   false
-);
+)
 
-var lastTouchEnd = 0;
+var lastTouchEnd = 0
 document.documentElement.addEventListener(
-  "touchend",
+  'touchend',
   function (event) {
-    var now = Date.now();
+    var now = Date.now()
     if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
+      event.preventDefault()
     }
-    lastTouchEnd = now;
+    lastTouchEnd = now
   },
   false
-);
+)
 
-document.addEventListener("gesturestart", function (event) {
-  event.preventDefault();
-});
+document.addEventListener('gesturestart', function (event) {
+  event.preventDefault()
+})
