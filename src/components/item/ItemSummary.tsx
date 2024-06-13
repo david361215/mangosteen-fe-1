@@ -30,8 +30,8 @@ export const ItemSummary = defineComponent({
       const response = await httpClient.get<Resources<Item>>(
         '/items',
         {
-          happen_after: props.startDate,
-          happen_before: props.endDate,
+          happened_after: props.startDate,
+          happened_before: props.endDate,
           page: page.value + 1
         },
         {
@@ -67,8 +67,8 @@ export const ItemSummary = defineComponent({
       const response = await httpClient.get(
         '/items/balance',
         {
-          happen_after: props.startDate,
-          happen_before: props.endDate,
+          happened_after: props.startDate,
+          happened_before: props.endDate,
           page: page.value + 1
         },
         {

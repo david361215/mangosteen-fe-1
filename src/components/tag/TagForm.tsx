@@ -20,9 +20,9 @@ export const TagForm = defineComponent({
       id: undefined,
       name: '',
       sign: '',
-      kind: route.query.kind!.toString()
+      kind: route.query.kind!.toString() as 'expenses' | 'income'
     })
-    const errors = reactive<{ [k in keyof typeof formData]?: string[] }>({})
+    const errors = reactive<FormErrors<typeof formData>>({})
     const onSubmit = async (e: Event) => {
       //取消提交表单
       e.preventDefault()

@@ -12,20 +12,14 @@ declare module '*.scss' {
   export default content
 }
 
-type JSONValue =
-  | null
-  | boolean
-  | string
-  | number
-  | JSONValue[]
-  | Record<string, JSONValue>
+type JSONValue = null | boolean | string | number | JSONValue[] | Record<string, JSONValue>
 
 type Tag = {
   id: number
   user_id: number
   name: string
   sign: string
-  kind: expenses | income
+  kind: 'expenses' | 'income'
 }
 
 type User = {
@@ -37,10 +31,10 @@ type Item = {
   id: number
   user_id: number
   amount: number
-  tags_id: number[]
+  tag_ids: number[]
   tags?: Tag[]
   happened_at: string
-  kind: expenses | income
+  kind: 'expenses' | 'income'
 }
 
 type Resources<T = any> = {
@@ -59,3 +53,5 @@ type Resource<T> = {
 type ResourceError = {
   errors: Record<string, string[]>
 }
+
+type FormErrors<T> = { [K in keyof typeof T]: string[] }
