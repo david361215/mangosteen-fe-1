@@ -5,7 +5,7 @@ import { createRouter } from 'vue-router'
 import { routes } from './config/routes'
 import { history } from './shared/history'
 import '@svgstore'
-import { createPinia } from 'pinia'
+import { createPinia, storeToRefs } from 'pinia'
 import { useMeStore } from './stores/useMeStore'
 
 const router = createRouter({ history, routes })
@@ -16,6 +16,7 @@ app.use(router)
 app.mount('#app')
 
 const meStore = useMeStore()
+const {mePromise} = storeToRefs(meStore)
 meStore.fetchMe()
 
 const whitelist: Record<string, 'exact' | 'startsWith'> = {
@@ -35,7 +36,7 @@ router.beforeEach((to, from) => {
       return true
     }
   }
-  return meStore.mePromise!.then(
+  return mePromise!.value!.then(
     () => true,
     () => '/sign_in?return_to=' + to.path
   )
