@@ -8,6 +8,7 @@ import { Datetime } from '../../shared/Datetime'
 import { Center } from '../../shared/components/Center'
 import { Icon } from '../../shared/components/Icon'
 import { RouterLink } from 'vue-router'
+import { useAfterMe } from '../../hooks/useAfterMe'
 export const ItemSummary = defineComponent({
   props: {
     startDate: {
@@ -44,7 +45,7 @@ export const ItemSummary = defineComponent({
       hasMore.value = (pager.page - 1) * pager.per_page + resources.length < pager.count
       page.value += 1
     }
-    onMounted(fetchItems)
+    useAfterMe(fetchItems)
 
     watch(
       () => [props.startDate, props.endDate],
@@ -77,7 +78,7 @@ export const ItemSummary = defineComponent({
       )
       Object.assign(itemsBalance, response.data)
     }
-    onMounted(fetchItemsBalance)
+    useAfterMe(fetchItemsBalance)
 
     watch(
       () => [props.startDate, props.endDate],
