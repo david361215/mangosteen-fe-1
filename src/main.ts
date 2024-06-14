@@ -5,11 +5,18 @@ import { createRouter } from 'vue-router'
 import { routes } from './config/routes'
 import { history } from './shared/history'
 import '@svgstore'
-import { fetchMe, mePromise } from './shared/me'
+import { createPinia } from 'pinia'
+import { useMeStore } from './stores/useMeStore'
 
 const router = createRouter({ history, routes })
+const pinia = createPinia()
+const app = createApp(App)
+app.use(pinia)
+app.use(router)
+app.mount('#app')
 
-fetchMe()
+const meStore = useMeStore()
+meStore.fetchMe()
 
 const whitelist: Record<string, 'exact' | 'startsWith'> = {
   '/': 'exact',
@@ -28,15 +35,11 @@ router.beforeEach((to, from) => {
       return true
     }
   }
-  return mePromise!.then(
+  return meStore.mePromise!.then(
     () => true,
     () => '/sign_in?return_to=' + to.path
   )
 })
-
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
 
 // 如下代码是禁止用户在 ios 上双手缩放页面
 document.documentElement.addEventListener(

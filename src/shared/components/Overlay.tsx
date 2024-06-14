@@ -2,28 +2,29 @@ import { defineComponent, onMounted, PropType, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { Icon } from './Icon'
 import s from './Overlay.module.scss'
-import { fetchMe } from '../me'
 import { Dialog } from 'vant'
+import { useMeStore } from '../../stores/useMeStore'
 export const Overlay = defineComponent({
   props: {
     onClose: {
-      type: Function as PropType<() => void>,
-    },
+      type: Function as PropType<() => void>
+    }
   },
   setup: (props, context) => {
+    const meStore = useMeStore()
     const close = () => {
       props.onClose?.()
     }
     const route = useRoute()
     const me = ref<User>()
     onMounted(async () => {
-      const response = await fetchMe()
+      const response = await meStore.mePromise
       me.value = response?.data.resource
     })
     const onSignOut = async () => {
       await Dialog.confirm({
         title: '确认',
-        message: '你真的要退出登录吗？',
+        message: '你真的要退出登录吗？'
       })
       localStorage.removeItem('jwt')
     }
@@ -69,7 +70,7 @@ export const Overlay = defineComponent({
         </div>
       </>
     )
-  },
+  }
 })
 
 export const OverlayIcon = defineComponent({
@@ -90,5 +91,5 @@ export const OverlayIcon = defineComponent({
         )}
       </>
     )
-  },
+  }
 })
