@@ -16,7 +16,7 @@ app.use(router)
 app.mount('#app')
 
 const meStore = useMeStore()
-const {mePromise} = storeToRefs(meStore)
+const { mePromise } = storeToRefs(meStore)
 meStore.fetchMe()
 
 const whitelist: Record<string, 'exact' | 'startsWith'> = {
@@ -38,7 +38,7 @@ router.beforeEach((to, from) => {
   }
   return mePromise!.value!.then(
     () => true,
-    () => '/sign_in?return_to=' + to.path
+    () => '/sign_in?return_to=' + from.path
   )
 })
 
