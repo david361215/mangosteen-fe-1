@@ -91,7 +91,14 @@ const mock = (response: AxiosResponse) => {
   return false
 }
 
-export const httpClient = new HttpClient('http://8.138.147.80:3000/api/v1')
+function isDev() {
+  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.hostname !== '192.168.3.57') {
+    return false
+  }
+  return true
+}
+
+export const httpClient = new HttpClient(isDev() ? 'api/v1' : 'http://8.138.147.80:3000/api/v1')
 
 httpClient.instance.interceptors.request.use((config) => {
   const jwt = localStorage.getItem('jwt')
