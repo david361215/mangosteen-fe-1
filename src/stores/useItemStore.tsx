@@ -26,8 +26,8 @@ export const useItemStore = (id: string | string[]) =>
         const response = await httpClient.get<Resources<Item>>(
           '/items',
           {
-            happen_after: startDate,
-            happen_before: endDate,
+            happened_after: startDate,
+            happened_before: endDate,
             page: firstPage ? 1 : this.page + 1
           },
           {
