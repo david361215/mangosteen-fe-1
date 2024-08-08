@@ -25,20 +25,18 @@ export const Charts = defineComponent({
     }
   },
   setup: (props, context) => {
-    const kind = ref('expenses')
+    const kind = ref('expense')
     const data1 = ref<Data1>([])
     const betterData1 = computed<[string, number][]>(() => {
       if (!props.startDate || !props.endDate) {
         return []
       }
-      const array = []
       const diff = new Date(props.endDate).getTime() - new Date(props.startDate).getTime()
       const n = diff / DAY + 1
       return Array.from({ length: n }).map((_, i) => {
         const time = new Time(props.startDate + 'T00:00:00.000+0800').add(i, 'day').getTimestamp()
         const item = data1.value[0]
-        const amount =
-          item && new Date(item.happened_at + 'T00:00:00.000+0800').getTime() === time ? data1.value.shift()!.amount : 0
+        const amount = item && new Date(item.happened_at).getTime() === time ? data1.value.shift()!.amount : 0
         return [new Date(time).toISOString(), amount]
       })
     })
@@ -85,7 +83,8 @@ export const Charts = defineComponent({
           group_by: 'tag_id'
         },
         {
-          _mock: 'itemSummary'
+          _mock: 'itemSummary',
+          _autoLoading: true
         }
       )
       data2.value = response.data.groups
@@ -99,7 +98,7 @@ export const Charts = defineComponent({
           label="类型"
           type="select"
           options={[
-            { value: 'expenses', text: '支出' },
+            { value: 'expense', text: '支出' },
             { value: 'income', text: '收入' }
           ]}
           v-model={kind.value}

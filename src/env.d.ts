@@ -12,6 +12,8 @@ declare module '*.scss' {
   export default content
 }
 
+declare var DEBUG: boolean
+
 type JSONValue = null | boolean | string | number | JSONValue[] | Record<string, JSONValue>
 
 type Tag = {
@@ -19,7 +21,7 @@ type Tag = {
   user_id: number
   name: string
   sign: string
-  kind: 'expenses' | 'income'
+  kind: 'expense' | 'income'
 }
 
 type User = {
@@ -34,7 +36,7 @@ type Item = {
   tag_ids: number[]
   tags?: Tag[]
   happened_at: string
-  kind: 'expenses' | 'income'
+  kind: 'expense' | 'income'
 }
 
 type Resources<T = any> = {
@@ -54,4 +56,4 @@ type ResourceError = {
   errors: Record<string, string[]>
 }
 
-type FormErrors<T> = { [K in keyof typeof T]: string[] }
+type FormErrors<T> = { [K in keyof T]: string[] }

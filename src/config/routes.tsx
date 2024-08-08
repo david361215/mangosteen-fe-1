@@ -7,23 +7,17 @@ import { SecondActions } from '../components/welcome/SecondActions'
 import { ThirdActions } from '../components/welcome/ThirdActions'
 import { ForthActions } from '../components/welcome/ForthActions'
 
-import { Welcome } from '../components/welcome/Welcome'
 import { RouteRecordRaw } from 'vue-router'
-import { ItemPage } from '../views/ItemPage'
 import { ItemList } from '../components/item/ItemList'
 import { ItemCreate } from '../components/item/ItemCreate'
-import { TagPage } from '../views/TagPage'
 import { TagCreate } from '../components/tag/TagCreate'
 import { TagEdit } from '../components/tag/TagEdit'
-import { SignInPage } from '../views/SignInPage'
-import { StatisticsPage } from '../views/StatisticsPage'
-import { ComingSoon } from '../shared/ComingSoon'
 
 export const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/welcome' },
   {
     path: '/welcome',
-    component: Welcome,
+    component: () => import('../components/welcome/Welcome'),
     beforeEnter: (to, from, next) => {
       localStorage.getItem('skipFeatures') === 'yes' ? next('/items') : next()
     },
@@ -37,7 +31,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/items',
-    component: ItemPage,
+    component: () => import('../views/ItemPage'),
     children: [
       { path: '', component: ItemList },
       { path: 'create', component: ItemCreate }
@@ -45,7 +39,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/tags',
-    component: TagPage,
+    component: () => import('../views/TagPage'),
     children: [
       { path: 'create', component: TagCreate },
       { path: ':id/edit', component: TagEdit }
@@ -53,18 +47,18 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/sign_in',
-    component: SignInPage
+    component: () => import('../views/SignInPage')
   },
   {
     path: '/statistics',
-    component: StatisticsPage
+    component: () => import('../views/StatisticsPage')
   },
   {
     path: '/export',
-    component: ComingSoon
+    component: () => import('../shared/ComingSoon')
   },
   {
     path: '/notify',
-    component: ComingSoon
+    component: () => import('../shared/ComingSoon')
   }
 ]

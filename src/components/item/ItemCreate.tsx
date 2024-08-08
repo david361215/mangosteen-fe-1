@@ -19,7 +19,7 @@ export const ItemCreate = defineComponent({
   },
   setup: (props, context) => {
     const formData = reactive<Partial<Item>>({
-      kind: 'expenses',
+      kind: 'expense',
       tag_ids: [],
       amount: 0,
       happened_at: new Date().toISOString()
@@ -48,7 +48,6 @@ export const ItemCreate = defineComponent({
           { key: 'happened_at', type: 'required', message: '时间必填' }
         ])
       )
-      console.log(formData.amount)
       if (hasError(errors)) {
         Dialog.alert({
           title: '出错',
@@ -72,8 +71,8 @@ export const ItemCreate = defineComponent({
             <>
               <div class={s.wrapper}>
                 <Tabs v-model:selected={formData.kind} class={s.tabs}>
-                  <Tab value="expenses" name="支出">
-                    <Tags kind="expenses" v-model:selected={formData.tag_ids![0]} />
+                  <Tab value="expense" name="支出">
+                    <Tags kind="expense" v-model:selected={formData.tag_ids![0]} />
                   </Tab>
                   <Tab value="income" name="收入">
                     <Tags kind="income" v-model:selected={formData.tag_ids![0]} />

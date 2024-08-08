@@ -74,7 +74,6 @@ export const SignInPage = defineComponent({
         )
         .catch(onError)
         .finally(enable)
-      // 成功
       refValidationCode.value.startCount()
     }
     return () => (
@@ -118,3 +117,4 @@ export const SignInPage = defineComponent({
     )
   }
 })
+export default SignInPage

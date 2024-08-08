@@ -32,7 +32,7 @@ export const ItemSummary = defineComponent({
       }
     )
     const itemsBalance = reactive({
-      expenses: 0,
+      expense: 0,
       income: 0,
       balance: 0
     })
@@ -58,7 +58,7 @@ export const ItemSummary = defineComponent({
       () => [props.startDate, props.endDate],
       () => {
         Object.assign(itemsBalance, {
-          expenses: 0,
+          expense: 0,
           income: 0,
           balance: 0
         })
@@ -79,7 +79,7 @@ export const ItemSummary = defineComponent({
                 </li>
                 <li>
                   <span>支出</span>
-                  <Money value={itemsBalance.expenses} />
+                  <Money value={itemsBalance.expense} />
                 </li>
                 <li>
                   <span>净收入</span>
@@ -90,11 +90,11 @@ export const ItemSummary = defineComponent({
                 {itemStore.items.map((item) => (
                   <li>
                     <div class={s.sign}>
-                      <span>{item.tags && item.tags.length > 0 ? item.tags[0].sign : '💰'}</span>
+                      <span>{item.tags![0].sign}</span>
                     </div>
                     <div class={s.text}>
                       <div class={s.tagAndAmount}>
-                        <span class={s.tag}>{item.tags && item.tags.length > 0 ? item.tags[0].name : '未分类'}</span>
+                        <span class={s.tag}>{item.tags![0].name}</span>
                         <span class={s.amount}>
                           ￥<Money value={item.amount} />
                         </span>

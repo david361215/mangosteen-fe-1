@@ -6,6 +6,9 @@ import s from './Tag.module.scss'
 import { useRoute, useRouter } from 'vue-router'
 import { httpClient } from '../../shared/HttpClient'
 import { onFormError } from '../../shared/onFormError'
+import { Dialog } from 'vant'
+import { AxiosError } from 'axios'
+
 export const TagForm = defineComponent({
   props: {
     name: {
@@ -20,9 +23,19 @@ export const TagForm = defineComponent({
       id: undefined,
       name: '',
       sign: '',
-      kind: route.query.kind!.toString() as 'expenses' | 'income'
+      kind: route.query.kind!.toString() as 'expense' | 'income'
     })
     const errors = reactive<FormErrors<typeof formData>>({})
+
+    const onError = (error: AxiosError<ResourceError>) => {
+      if (error.response?.status === 403) {
+        Dialog.alert({
+          title: '出错',
+          message: Object.values(error.response.data.errors).join('\n')
+        })
+      }
+      throw error
+    }
     const onSubmit = async (e: Event) => {
       //取消提交表单
       e.preventDefault()
@@ -61,13 +74,15 @@ export const TagForm = defineComponent({
       if (!props.id) {
         return
       }
-      const response = await httpClient.get<Resource<Tag>>(
-        `/tags/${props.id}`,
-        {},
-        {
-          _mock: 'tagShow'
-        }
-      )
+      const response = await httpClient
+        .get<Resource<Tag>>(
+          `/tags/${props.id}`,
+          {},
+          {
+            _mock: 'tagShow'
+          }
+        )
+        .catch(onError)
       Object.assign(formData, response.data.resource)
     })
     return () => (
